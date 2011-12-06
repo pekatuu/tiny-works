@@ -1,0 +1,34 @@
+#hardstatus alwayslastline '%h'
+hardstatus alwayslastline "%{= 80}%-Lw%25>%{+b WB}%n%f %t%{-}%75>%+Lw%<"
+
+
+#
+defscrollback 10000
+
+################
+#
+# keybindings
+#
+
+# remove some stupid / dangerous key bindings
+# vbell: disable
+#bind ^g
+bind s colon 'screen ssh '
+
+# window movement
+bind ^u focus left
+bind ^o focus right
+bind I focus up
+
+#bindkey -k kb stuff "^h"
+
+################
+#
+# misc
+#
+
+# escape sequence
+escape ^t^t
+
+screen 0
+screen 1

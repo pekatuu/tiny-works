@@ -1,0 +1,7 @@
+This is mod version of wmctrl 1.07.
+2 options added
+-X
+  Use with -l option. Print X at active window when listing windows.
+-A
+  Like -l, bug only show active window.
+

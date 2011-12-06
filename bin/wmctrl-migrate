@@ -1,0 +1,12 @@
+#! /usr/bin/ruby
+require 'drb'
+case ARGV[0]
+when 'next'
+  ctrl = DRbObject.new_with_uri('druby://127.0.0.1:5656').active_next_region
+when 'prev'
+  ctrl = DRbObject.new_with_uri('druby://127.0.0.1:5656').active_next_region
+when 'nextmap'
+  ctrl = DRbObject.new_with_uri('druby://127.0.0.1:5656').next_region_map
+when 'prevmap'
+  ctrl = DRbObject.new_with_uri('druby://127.0.0.1:5656').prev_region_map
+end

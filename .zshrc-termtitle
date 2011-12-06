@@ -1,0 +1,144 @@
+# Print Working Direcotry to Title Bar
+HOST_S=`hostname -s 2> /dev/null`
+if [ x"$HOST_S" = x"" ]; then
+	HOST_S=`hostname`
+fi
+if [ "${#HOST_S}" -gt 5 ]; then
+	HOST_SCREENTITLE=`echo ${HOST_S} | sed -e "s/\([^.]*\)\.\(.*\)/\1/g"`
+	if [ x"$HOST_SCREENTITLE" = x"" ]; then
+		HOST_SCREENTITLE="${HOST_S}"
+	fi
+else
+	HOST_SCREENTITLE="${HOST_S}"
+fi
+
+
+if [ x"$TERM" = x"rxvt" -o x"$TERM" = x"kterm" -o x"$TERM" = x"xterm" -o x"$TERM
+" = x"vt100" -o x"$TERM" = x"putty" ]
+then
+	termtitle=y
+	function termtitle()
+	{
+		if [ x"$termtitle" = x"y" ]
+		then
+			local str="$@"
+			case "$str" in
+			**) # can't work well
+				;;
+			*)
+				#echo -n "\033]0;${str:s/^G//}\007"
+				{{
+					echo -n "\033]0;"
+					echo -nE "$str"
+					echo -n "\007"
+				} > /dev/tty } 2> /dev/null
+				;;
+			esac
+		fi
+	}
+	function screentitle()
+	{
+	}
+elif [ x"$TERM" = x"screen" ]
+then
+	termtitle=n
+	function termtitle()
+	{
+		if [ x"$termtitle" = x"y" ]
+		then
+			local str="$@"
+			case "$str" in
+			**) # can't work well
+				;;
+			*)
+				#echo -n "\033]0;${str:s/^G//}\007"
+				{{
+					# for xterm title
+					#echo -n "\033]0;"
+					echo -n "\033P\033]0;"
+					#echo -nE "$WINDOW $str"
+					echo -nE "$str"
+					#echo -n "\007"
+					echo -n "\007\033\\" 
+					# for screen title
+					#echo -n "\033k"
+					#echo -nE "$str"
+					#echo -n "\033\\"
+				} > /dev/tty } 2> /dev/null
+				;;
+			esac
+		fi
+	}
+	screentitle=y
+	function screentitle()
+	{
+		if [ x"$screentitle" = x"y" ]
+		then
+			local str="$@"
+			case "$str" in
+			**) # can't work well
+				;;
+			*)
+				#echo -n "\033]0;${str:s/^G//}\007"
+				{{
+					# for screen title
+					echo -n "\033k"
+					echo -nE "$str"
+					echo -n "\033\\"
+				} > /dev/tty } 2> /dev/null
+				;;
+			esac
+		fi
+	}
+else
+	function termtitle()
+	{
+	}
+	function screentitle()
+	{
+	}
+fi
+
+
+tty=`tty|sed -e 's/^\/dev\///'`
+function precmd()
+{
+	#termtitle "${USER}@${tty}.${HOST_SCREENTITLE} `dirs`"
+	if [[ -z ${chroot} ]]; then
+		screentitle "${HOST_SCREENTITLE}"
+		termtitle "${USER}@${HOST_S} `dirs`"
+	else
+		screentitle "${HOST_SCREENTITLE}%${chroot}"
+		termtitle "${USER}@${HOST_S}%${chroot} `dirs`"
+	fi
+}
+
+#function slogin()
+#{
+#	termtitle "slogin $@"
+#	command slogin "$@"
+#}
+
+setopt EXTENDED_GLOB
+
+## forコマンドの時に出力が乱れる?
+function preexec()
+{
+	local cmd=$@[2]
+	#cmd=${cmd://}
+
+	# 環境変数設定や sudo，それに続くオプションを捨てる
+	cmd_s=${cmd##(([^ ]#=[^ ]#|env|sudo|-[-a-zA-Z]#) #)#}
+	# 先頭1語だけを取り出す
+	cmd_s=${cmd_s%% *}
+	if [ -z ${chroot} ]; then
+		screentitle "$cmd_s@${HOST_SCREENTITLE}"
+		termtitle "$cmd	 ${USER}@${HOST_S} `dirs`"
+	else
+		screentitle "$cmd_s@${HOST_SCREENTITLE}%${chroot}"
+		termtitle "$cmd	 ${USER}@${HOST_S}%${chroot} `dirs`"
+	fi
+}
+
+# vi:ts=4:sw=4:sts=0
+

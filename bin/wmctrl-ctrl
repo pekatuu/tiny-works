@@ -1,0 +1,143 @@
+#! /usr/bin/ruby
+require 'drb'
+TOP = 0
+H = 1146
+HH = 558
+REGION_MAPS = 
+  [
+   [
+    [0,    TOP, 640,  H],
+    [640,  TOP, 1280, H],
+    [1280, TOP, 640,  H]
+   ],
+   [
+    [0,    TOP     , 1280, H],
+    [1280, TOP     , 640, HH],
+    [1280, TOP + HH, 640, HH]
+   ]
+  ]
+$CURRENT_REGION_MAP = 0
+  
+class Window
+  attr_accessor :id, :active
+  def initialize(active, id, key)
+    @id = id
+    @key = key
+    @active = active
+    @region = 0
+  end
+
+  def migrate(region = nil)
+    region_map = REGION_MAPS[$CURRENT_REGION_MAP]
+    if region
+      if region >= region_map.size
+        @region = 0
+      elsif region < 0
+        @region = region_map.size - 1
+      else
+        @region = region
+      end
+    end    
+    
+    `wmctrl -i -r #{@id} -e 0,#{region_map[@region].join(',')}`
+  end
+
+  def next_region
+    migrate(@region + 1)
+  end
+
+  def prev_region
+    migrate(@region - 1)
+  end
+end
+
+class WindowGroup < Hash
+  def initialize
+    super
+    @idx = 0
+  end
+
+  def focus_next
+    @idx = (@idx + 1) % size if self[keys[@idx]].active
+    `wmctrl -i -a #{self[keys[@idx]].id}`
+  end
+end
+
+class WmctrlCtrl
+  LOCK = Mutex.new
+
+  def initialize
+    @groups = {}
+  end
+
+  def active_next_region
+    get_active_window.next_region
+  end
+
+  def active_prev_region
+    get_active_window.prev_region
+  end
+
+  def get_active_window
+    out = `wmctrl -Ax`.split(' ')
+    id, key = out[0], out[2].split('.').last
+    group = @groups[key] ||= WindowGroup.new
+    group[id] ||= Window.new(true, id, key)
+  end
+
+  def re_migrate_all
+    @groups.each{|k,g| g.each{|i, w| w.migrate}}
+  end
+
+  def next_region_map
+    $CURRENT_REGION_MAP = ($CURRENT_REGION_MAP + 1) % REGION_MAPS.size
+    re_migrate_all
+  end
+
+  def next_region_map
+    i = $CURRENT_REGION_MAP - 1
+    $CURRENT_REGION_MAP = i < 0 ? REGION_MAPS.size - 1: i
+    re_migrate_all
+  end
+
+  def next_or_run(key, cmd)
+    LOCK.synchronize do
+      update_class(key)
+      g = @groups[key]
+      if g.empty? 
+        `sh -c "#{cmd}" &`
+      else 
+        g.focus_next
+      end
+    end
+  end
+
+  private
+  def update_class(key)
+    group = @groups[key] ||= WindowGroup.new
+    before_keys = group.keys
+
+    each_window do |is_active, id, clazz|
+      next unless clazz.end_with? key
+      group[id] = Window.new(is_active, id, key) unless group.has_key? id
+    end
+    
+    (before_keys - group.keys).each{|k| group.delete k}
+  end
+
+  def each_window(&block)
+    `wmctrl -lxX`.split("\n").each do |m|
+      is_active = false
+      if m.start_with? 'X'
+        is_active = true
+        m = m[1..m.size]
+      end
+
+      mm = m.split(' ')
+      block.call(is_active,  mm[0], mm[2])
+    end
+  end
+end
+
+DRb.start_service("druby://127.0.0.1:5656", WmctrlCtrl.new)
+DRb.thread.join

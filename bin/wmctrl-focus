@@ -1,0 +1,3 @@
+#! /usr/bin/ruby
+require 'drb'
+ctrl = DRbObject.new_with_uri('druby://127.0.0.1:5656').next_or_run(ARGV[0], ARGV[1])
