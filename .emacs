@@ -1,38 +1,10 @@
-;===================================
-; font
-;===================================
-(cond ( (string-match "^23\." emacs-version)
- (cond (window-system
-;	 (set-default-font "Yutapon coding Bold-10")
-;	 (set-default-font "Liberation Mono-9:bold")
-;	 (set-default-font "Inconsolata-10")
-;	 (set-default-font "M+1VM+IPAG circle-9")
-;	 (set-default-font "Consolas-9.8")
-;	(set-default-font "DejaVu Sans Mono-9:bold")
-	(set-default-font "DejaVu Sans Mono-9:bold")
-;	 (set-default-font "DejaVu Sans Mono-10")
-    (set-fontset-font (frame-parameter nil 'font)
-      'japanese-jisx0208
-;      (font-spec :family "meiryo" :size 16))
-;      (font-spec :family "M+1VM+IPAG circle" :size 16))
-;      (font-spec :family "Osaka\-Mono" :size 16))
-;     (font-spec :family "Hiragino Kaku Gothic ProN W3" :size 14))
-     (font-spec :family "Hiragino Kaku Gothic ProN W6" :size 14))
-;      (font-spec :family "Hiragino Kaku Gothic ProN W6" :size 14))
-;      (font-spec :family "Hiragino Mincho ProN W6" :size 14))
-;      (font-spec :family "Kozuka Mincho Pro\-VI" :size 14))
-;      (font-spec :family "Kozuka Gothic Pro\-VI" :size 14))
-;      (font-spec :family "Yutapon coding Bold" :size 16))
-))))
-;hogehogehogehogehoge
-;ほげほげほげほげほげ
-;間開関閉璧壁
-;````^^^~~~~-'"```^|l1L\/][{}()&%"#mv^```````````1111LLLLlllllllll123lLiIlIlI
-;ぱばぱばぱば
+; set load path
 (setq load-path
-      (append (list "~/.emacs.d"
-		    "~/.emacs.d/auto-install"
-		    "~/.emacs.d/emacs-skype") load-path))
+      (append (list 
+	       "/usr/share/emacs/site-lisp/anthy"
+	       "~/.emacs.d"
+	       "~/.emacs.d/auto-install") load-path))
+
 
 ;===================================
 ; エンコード
@@ -50,78 +22,6 @@
 (add-hook 'dired-before-readin-hook
 	  (lambda ()
 	    (set (make-local-variable 'coding-system-for-read) 'utf-8)))
-
-;===================================
-; フレームの設定
-;===================================
-(setq default-frame-alist
-      (append (list 
-	       '(height . 92)
-	       '(width . 88)
-	       '(alpha . 80)
-		    )
-	      default-frame-alist))
-; カーソルを点滅させない
-(blink-cursor-mode 0)
-
-
-
-;===================================
-; yatex
-;===================================
-;(setq load-path
-;      (append (list "~/.yatex") load-path))
-
-(setq auto-mode-alist
-      (cons (cons "\\.tex$" 'yatex-mode) auto-mode-alist))
-(autoload 'yatex-mode "yatex" "Yet Another LaTeX mode" t)
-
-(defun YaTeX-previous-section ()
-  "move to previous section"
-  (interactive)
-  (previous-line)
-  (search-backward "section{"))
-
-
-(defun YaTeX-next-section ()
-  "move to next section"
-  (interactive)
-  (next-line)
-  (search-forward "section{"))
-
-(add-hook 'yatex-mode-hook
-	  (lambda ()
-	    (define-key YaTeX-mode-map (kbd "\C-c\C-v") 'YaTeX-section-overview)
-	    (define-key YaTeX-mode-map (kbd "\C-c\C-p") 'YaTeX-previous-section)
-	    (define-key YaTeX-mode-map (kbd "\C-c\C-n") 'YaTeX-next-section)
-	    (define-key YaTeX-mode-map (kbd "\C-t") 'delete-backward-char)))
-
-
-
-;TeX typeset
-(setq tex-command "platex")
-
-;dvi preview
-(setq dvi2-command "xdvi -geometry 1024x750+0+0 -s 0 -paper a4r")
-
-;;;   1=Shift JIS
-;;;   2=JIS
-;;;   3=EUC
-(setq YaTeX-kanji-code 3)
-
-; add dvipdfmx
-(setq dviprint-command-format "dvipdfmx -l %s ")
-
-;===================================
-; migemo
-;===================================
-(load "migemo")
-
-;===================================
-; desktop-read
-;===================================
-;(desktop-load-default)
-;(desktop-read)
 
 ;====================================
 ; Misc
@@ -154,7 +54,7 @@
 (setq frame-title-format   
       (concat "%b - emacs@" system-name))
 ;;; ツールバーを消す
-(tool-bar-mode 0)
+(setq tool-bar-mode 0)
 ;;; メニューバーを消す
 (menu-bar-mode 0)
 ;;;スクロールバーを消す
@@ -162,45 +62,8 @@
 ;;;リージョンのハイライトを無効に
 (transient-mark-mode 0)
 
-;;;行のハイライト
-(defface hlline-face
-  '((((class color)
-      (background dark))
-     (:background "gray15"))
-    (((class color)
-      (background light))
-     (:background "gray15"))
-    (t
-     ()))
-  "*Face used by hl-line.")
-
-(defface hlline-face-japanese
-  '((((class color)
-      (background dark))
-     (:background "dark blue"))
-    (((class color)
-      (background light))
-     (:background "dark blue"))
-    (t
-     ()))
-  "*Face used by hl-line in japanese ime.")
-
-(setq hl-line-face 'hlline-face)
-;(setq hl-line-face 'underline) ; 下線
-(global-hl-line-mode 1)
-
-
 ;;;対応する括弧の強調
 (show-paren-mode t)
-
-;;;使用ブラウザの変更
-;;; set browser
-(defun browse-url-chrome (url &optional new-window)
-  (interactive (browse-url-interactive-arg "URL: "))
-;  (start-process "google-chrome" nil "google-chrome"
-  (start-process "firefox" nil "firefox"
-                 url))
-(setq browse-url-browser-function 'browse-url-chrome)
 
 ;===================================
 ; dabbrev-expand-multiple
@@ -212,94 +75,59 @@
 ;===================================
 ; 日本語
 ;===================================
-;(set-language-environment "Japanese")
-;(set-default-coding-systems 'euc-jp-unix)
-;(set-terminal-coding-system 'euc-jp-unix)
-;(set-keyboard-coding-system 'euc-jp-unix)
-;(set-buffer-file-coding-system 'euc-jp-unix)
+(set-language-environment "Japanese")
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (set-buffer-file-coding-system 'utf-8)
 
-;=================================
-; iBus
-;=================================
-(if (window-system)
-    (progn
-      (require 'ibus)                             
-      (add-hook 'after-init-hook 'ibus-mode-on)
-      (global-set-key "\C-\\" 'ibus-toggle)
-      (setq ibus-cursor-color '("green" "white" "limegreen"))
-      (setq ibus-use-in-isearch-window nil)
-      ))
-
-(defun ibus-toggle ()
-  "Toggle IBus' input status."
-  (interactive)
-  (when (and (interactive-p)
-	     (null ibus-current-buffer))
-    (ibus-check-current-buffer))
-  (if ibus-imcontext-status
-      (progn
-	(ibus-disable)
-	(setq hl-line-face 'hlline-face)
-	)
-    (progn
-      (ibus-enable)
-      (setq hl-line-face 'hlline-face-japanese)
-      ))
-  )
-
-
 ;===================================
 ; Anthy 
 ;===================================
+;入力モードに応じて色を変える
+; (defun anthy-adjust-cursor-color ()
+;   (if anthy-minor-mode
+;       (progn
+; 	(set-cursor-color "green")
+; 	(setq hl-line-face 'hlline-face-japanese))
+;;     (progn
+;;       (set-cursor-color "white")
+;;       (setq hl-line-face 'hlline-face))
+;;     ))
 
-;;;入力モードに応じて色を変える
-(defun anthy-adjust-cursor-color ()
-  (if anthy-minor-mode
-      (progn
-	(set-cursor-color "green")
-	(setq hl-line-face 'hlline-face-japanese))
-    (progn
-      (set-cursor-color "white")
-      (setq hl-line-face 'hlline-face))
-    ))
-
-(if (not (window-system))
-    (progn
-      (set-input-method "japanese-anthy")
-      (if ( >= emacs-major-version 23)
-	  (setq anthy-accept-timeout 1))
-      
-      (setq anthy-wide-space " ")
-      (anthy-change-hiragana-map "xn" "ん")
-      (anthy-change-hiragana-map "." "．")
-      (anthy-change-hiragana-map "," "，")
-      (anthy-change-hiragana-map "*" "*")
-      (anthy-change-hiragana-map "[" "[")
-      (anthy-change-hiragana-map "]" "]")
-      (anthy-change-hiragana-map "->" "→")
-      (anthy-change-hiragana-map "<-" "←")
+ (if (not (window-system))
+     (progn
+       (set-input-method "anthy")
+       (if ( >= emacs-major-version 23)
+ 	  (setq anthy-accept-timeout 1))
+    
+       (setq anthy-wide-space " ")
+       (anthy-change-hiragana-map "xn" "ん")
+       (anthy-change-hiragana-map "." "．")
+       (anthy-change-hiragana-map "," "，")
+       (anthy-change-hiragana-map "*" "*")
+       (anthy-change-hiragana-map "[" "[")
+       (anthy-change-hiragana-map "]" "]")
+       (anthy-change-hiragana-map "->" "→")
+       (anthy-change-hiragana-map "<-" "←")
 
 
-      (mapcar
-       (lambda (f)
-	 (eval
-	  `(defadvice ,f (after adjust-cursor-color activate)
-	     (anthy-adjust-cursor-color))))
-       '(anthy-update-mode-line
-	 anthy-mode-off
-	 bury-buffer
-	 kill-buffer
-	 other-window
-	 pop-to-buffer
-	 switch-to-buffer
-	 windmove-up
-	 windmove-right
-	 windmove-down
-	 windmove-left))))
+;;       (mapcar
+;;        (lambda (f)
+;; 	 (eval
+;; 	  `(defadvice ,f (after adjust-cursor-color activate)
+;; 	     (anthy-adjust-cursor-color))))
+;;        '(anthy-update-mode-line
+;; 	 anthy-mode-off
+;; 	 bury-buffer
+;; 	 kill-buffer
+;; 	 other-window
+;; 	 pop-to-buffer
+;; 	 switch-to-buffer
+;; 	 windmove-up
+;; 	 windmove-right
+;; 	 windmove-down
+;; 	 windmove-left))))
 
 ;===================================
 ; org
@@ -405,53 +233,12 @@ If the link is in hidden text, expose it."
 (define-key org-mode-map "\M-n" 'org-next-visible-link)
 (define-key org-mode-map "\M-p" 'org-previous-visible-link)
 
-;===================================
-; print-buffer
-;===================================
-(setq ps-multibyte-buffer 'non-latein-printer)
-(require 'ps-mule)
-(defalias 'ps-mule-header-string-charsets 'ignore)
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(org-agenda-files (quote ("~/memo/agenda.org"))))
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- )
-
-
 ;=================================
-; auto complete
+; anything.el
 ;=================================
-(require 'auto-complete)
-
-;=================================
-; pull down
-;=================================
-(require 'pulldown)
-(require 'popup)
-
-;=================================
-; switch-to-buffer-popup
-;=================================
-(defun switch-to-buffer-popup ()
-  (interactive)
-  (let ((inhibit-read-only t)
-	(buf-list (buffer-list))
-	(rslt-list nil))
-    (while buf-list
-      (unless (string-match "^ " (buffer-name (car buf-list)))
-	(setq rslt-list (cons (car buf-list) rslt-list)))
-      (setq buf-list (cdr buf-list)))
-    (switch-to-buffer
-     (popup-menu (cdr (reverse rslt-list)) :scroll-bar t :margin t))))
-
-;(global-set-key "\C-xb" 'switch-to-buffer-popup)
+(require 'anything)
+(require 'anything-startup)
+(global-set-key (kbd "C-x b") 'anything-for-files)
 
 ;=================================
 ; auto-install.el
@@ -462,66 +249,11 @@ If the link is in hidden text, expose it."
 (auto-install-compatibility-setup)
 
 ;=================================
-; anything.el
+; auto complete
 ;=================================
-(require 'anything)
-(require 'anything-startup)
-(global-set-key "\C-x\M-f" 'anything-filelist+)
-
-;=================================
-; 4 clojure
-;=================================
-
-
-;;; This was installed by package-install.el.
-;;; This provides support for the package system and
-;;; interfacing with ELPA, the package archive.
-;;; Move this code earlier if you want to reference
-;;; packages in your .emacs.
-
-(when
-    (load
-     (expand-file-name "~/.emacs.d/elpa/package.el"))
-  (package-initialize))
-
-;=================================
-; shell-pop
-;=================================
-(require 'shell-pop)
-(shell-pop-set-internal-mode "ansi-term")
-(shell-pop-set-internal-mode-shell "/usr/bin/zsh")
-(shell-pop-set-window-height 50)
-
-(defvar ansi-term-after-hook nil)
-(add-hook 'ansi-term-after-hook
-          (lambda ()
-            ;; これがないと M-x できなかったり
-            (define-key term-raw-map (kbd "M-x") 'nil)
-            ;; コピー, 貼り付け
-            (define-key term-raw-map (kbd "C-k")
-              (lambda (&optional arg) (interactive "P") (funcall 'kill-line arg) (term-send-raw)))
-            (define-key term-raw-map (kbd "C-y") 'term-paste)
-            (define-key term-raw-map (kbd "M-y") 'anything-show-kill-ring)
-            ;; Tango!
-            (setq ansi-term-color-vector
-                  [unspecified
-                   "#000000"           ; black
-                   "#ff3c3c"           ; red
-                   "#84dd27"           ; green
-                   "#eab93d"           ; yellow
-                   "#135ecc"           ; blue
-                   "#f47006"           ; magenta
-                   "#89b6e2"           ; cyan
-                   "#ffffff"]          ; white
-                  )
-            ))
-
-(defadvice ansi-term (after ansi-term-after-advice (arg))
-  "run hook as after advice"
-  (run-hooks 'ansi-term-after-hook))
-(ad-activate 'ansi-term)
-
-(global-set-key [M-zenkaku-hankaku] 'shell-pop)
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+(ac-config-default)
 
 ;=================================
 ; Gauche
@@ -538,44 +270,6 @@ If the link is in hidden text, expose it."
 
 (define-key global-map
   "\C-cS" 'scheme-other-window)
-
-;=================================
-; auto-complete
-;=================================
-;(require 'auto-complete)
-;(global-auto-complete-mode nil)
-
-;=================================
-; python
-;=================================
-;(require 'pysmell)
-;(defvar ac-source-pysmell
-;	  '((candidates
-;	     . (lambda ()
-;	         (require 'pysmell)
-;	         (pysmell-get-all-completions))))
-;	  "Source for PySmell")
-;
-;(define-key ac-complete-mode-map "\C-n" 'ac-next)
-;(define-key ac-complete-mode-map "\C-p" 'ac-previous)
-; 
-;(add-hook 'python-mode-hook
-;          '(lambda ()
-;             (set (make-local-variable 'ac-sources) 
-;		  (append ac-sources '(ac-source-pysmell)))))
-;
-;(require 'pymacs)
-;(autoload 'pymacs-apply "pymacs")
-;(autoload 'pymacs-call "pymacs")
-;(autoload 'pymacs-eval "pymacs" nil t)
-;(autoload 'pymacs-exec "pymacs" nil t)
-;(autoload 'pymacs-load "pymacs" nil t)
-
-;=================================
-; skype
-;=================================
-(require 'skype)
-(setq skype--my-user-handle "hoge")
 
 ;---------------------------------
 ; popwin
@@ -594,14 +288,8 @@ If the link is in hidden text, expose it."
 	("^\*magit:" :regexp t)))
 
 ;=================================
-; toggle-fullscreen
+; color theme
 ;=================================
-(defun toggle-fullscreen (&optional f)
-  (interactive)
-  (let ((current-value (frame-parameter nil 'fullscreen)))
-    (set-frame-parameter nil 'fullscreen
-			 (if (equal 'fullboth current-value)
-			     (if (boundp 'old-fullscreen) old-fullscreen nil)
-			   (progn (setq old-fullscreen current-value)
-				  'fullboth)))))
-(global-set-key [f11] 'toggle-fullscreen)
+(require 'color-theme)
+(color-theme-initialize)
+(color-theme-gray25)

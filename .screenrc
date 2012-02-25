@@ -1,34 +1,19 @@
-#hardstatus alwayslastline '%h'
 hardstatus alwayslastline "%{= 80}%-Lw%25>%{+b WB}%n%f %t%{-}%75>%+Lw%<"
 
-
-#
 defscrollback 10000
-
-################
-#
-# keybindings
-#
-
-# remove some stupid / dangerous key bindings
-# vbell: disable
-#bind ^g
-bind s colon 'screen ssh '
+term xterm-256color
 
 # window movement
-bind ^u focus left
-bind ^o focus right
-bind I focus up
+bind ^u eval "focus left" "focus up"
+bind ^i eval "focus right" "focus up"
+bind ^j eval "focus left" "focus down"
+bind ^k eval "focus right" "focus down"
 
-#bindkey -k kb stuff "^h"
+bind ^o layout next
 
-################
-#
-# misc
-#
-
-# escape sequence
 escape ^t^t
 
+layout new
+layout new
 screen 0
 screen 1

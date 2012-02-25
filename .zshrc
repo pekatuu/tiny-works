@@ -1,6 +1,5 @@
 # Created by newuser for 4.3.4
 source ~/.zshrc-termtitle
-PRIVATE_HOST="uilta"
 
 autoload -U compinit
 compinit
@@ -38,13 +37,9 @@ setopt PROMPT_SUBST
 
 if [ "${TERM}" = "dumb" ]; then
     PROMPT="${HOST%%.*}[%~]%%%  "
-else if [ $HOST = $PRIVATE_HOST ]; then
+else
     PROMPT="%B%{[46m%}${HOST%%.*}%%%{[m%} %b"
     RPROMPT="[%~]"
-else 
-    PROMPT="%B%{[41m%}${HOST%%.*}%%%{[m%} %b"
-    RPROMPT="[%~]"
-fi
 fi
 
 
@@ -68,9 +63,8 @@ bindkey '^[/' dabbrev-complete
 
 # ls
 alias ls='ls -hCF'
-
 if [ "$TERM" != "dumb" ] && [ -x /usr/bin/dircolors ]; then
-    eval "`dircolors -b ~/.dir_colors`"
+#    eval "`dircolors -b ~/.dir_colors`"
     alias ls='ls --color=auto -hCF' 
     #alias dir='ls --color=auto --format=vertical'
     #alias vdir='ls --color=auto --format=long'
@@ -83,22 +77,16 @@ alias l='ls -l'
 alias lt="ll -t"
 alias ..='cd ../'
 alias ../='cd ../'
-alias emacs='emacs -reverse --no-splash'
-alias emacsnw='\emacs -nw --no-splash'
 
-alias cl='. cl'
-alias rdesktop='rdesktop -a 16 -D -z -k ja -g 1280x1024+0+0 '
-alias sunflow="java -server -Xmx1000M -jar /usr/share/java/sunflow.jar $*"
-alias portsnew='portversion -v | grep -v ='
+alias ec="emacsclient -c "
 
-alias qdic='dic'
-
-alias gl='git log --graph --decorate'
-alias gco='git commit'
+alias gl='git log ' 
+alias gcm='git commit -m'
 alias ga='git add'
-alias gch='git checkout'
+alias gco='git checkout'
 alias gs='git status'
 alias gb='git branch'
+alias gd="git diff"
 
 # suffix aliases
 alias -s pdf=evince
@@ -110,17 +98,11 @@ alias -g L='| less'
 alias -g H='| head'
 alias -g T='| tail'
 alias -g G='| grep'
+alias -g GV='| grep -v '
 alias -g S='| sort'
 alias -g U='| uniq'
 
-if [ $HOST != $PRIVATE_HOST ]; then
-    alias sudo='echo "\(^o^)/"'
-fi
-
 # env
-export PATH=${PATH}:/home/g-yamada/bin:/storages/ssd/android-sdk-linux_86/tools
-export PYTHONPATH=$PYTHONPATH:$HOME/python/lib:$HOME/python/lib/python2.6/site-packages
+export PATH=${PATH}:${HOME}/bin:${HOME}/share/jruby-1.6.6/bin
 export LESS=' -R'
-export KIR='kir://pub/kir/g-yamada'
-export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
