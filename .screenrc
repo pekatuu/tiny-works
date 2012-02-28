@@ -1,4 +1,6 @@
-hardstatus alwayslastline "%{= 80}%-Lw%25>%{+b WB}%n%f %t%{-}%75>%+Lw%<"
+caption always "%{=r dd}%-Lw%40L>%?%F%{=b kg}%:[%? %n%f %t %?%F%{-}%:]%?%+Lw %?%F%-024=GNU Screen of Git master%:%=%?"
+hardstatus alwayslastline "%{= dd}[%Y-%m-%d %c] %`"
+backtick 0 3 3 monitor.rb
 
 defscrollback 10000
 term xterm-256color

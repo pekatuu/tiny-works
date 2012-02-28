@@ -77,7 +77,7 @@ alias l='ls -l'
 alias lt="ll -t"
 alias ..='cd ../'
 alias ../='cd ../'
-
+alias emacs="emacs -r --no-splash"
 alias ec="emacsclient -c "
 
 alias gl='git log ' 
@@ -103,6 +103,7 @@ alias -g S='| sort'
 alias -g U='| uniq'
 
 # env
-export PATH=${PATH}:${HOME}/bin:${HOME}/share/jruby-1.6.6/bin
+export JAVA_HOME=/usr/java/default
+export PATH=${PATH}:${HOME}/bin:${HOME}/share/jruby-1.6.6/bin:${JAVA_HOME}/bin
 export LESS=' -R'
 
