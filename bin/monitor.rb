@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby
+#!/usr/bin/env ruby
 WIDTH = 15
 SLEEP = 0.1
 def get_proc
@@ -29,4 +29,4 @@ def gen_bar(prefix, used, color = "ww")
 end
 
 used_str = "MEM" + format("% 5d", used) + "MB"
-print "#{gen_bar("CPU", p, "bw")} #{gen_bar(used_str, b, "gk")}"
+print "#{gen_bar("CPU", p, "bW")} #{gen_bar(used_str, b, "gK")}"

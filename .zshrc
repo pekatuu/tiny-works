@@ -32,8 +32,8 @@ function history-all { history -E 1 }
 
 case $HOST in
 "amaretto")
-	export SCREEN_CAPTION_NONE=bw
-	export SCREEN_CAPTION_SELECTED=wb
+	export SCREEN_CAPTION_NONE=bW
+	export SCREEN_CAPTION_SELECTED=Wb
 	prompt_bg=44
 	;;
 "corsica")
