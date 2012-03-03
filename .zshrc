@@ -39,7 +39,7 @@ case $HOST in
 "corsica")
 	export SCREEN_CAPTION_NONE=gk
 	export SCREEN_CAPTION_SELECTED=kg
-	prompt_bg=43
+	prompt_bg=42
 	;;
 *)
 	export SCREEN_CAPTION_NONE=rk

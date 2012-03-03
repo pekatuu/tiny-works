@@ -1,6 +1,6 @@
-#!/usr/bin/ruby
-WIDTH = 20
-SLEEP = 1
+#!/usr/local/bin/ruby
+WIDTH = 15
+SLEEP = 0.1
 def get_proc
   open("/proc/stat", "r"){|f|f.gets}.strip.split.drop(1).map(&:to_f) 
 end
@@ -12,17 +12,21 @@ b = get_proc
 idle = 0
 b.zip(a).map{|d,c| d - c}.tap{|r| idle = r[3]}.reduce(:+).tap{|t| p = 1 - idle/t}
 
-a =  `free`.split("\n")[1].split.map(&:to_f)
-b = 1 - a[3] / a[1]
+free_out =  `free -m`.split("\n")
+total = free_out[1].split[1].to_f
+used = free_out[2].split[2].to_f
+b = used / total
 
 def gen_bar(prefix, used, color = "ww")
   color_start = WIDTH - (WIDTH * used).round
-  percent = "#{format("% 3d", used * 100)}%"
+  percent = "#{format("% 4d", used * 100)}%"
   base = prefix + percent + ' ' * (WIDTH - prefix.size - percent.size)
+
   unless color_start >= WIDTH
-    base[color_start] = "\005{= #{color}}#{base[color_start].chr}"
+    base.insert color_start, "\005{= #{color}}"
   end
   "[#{base}\005{-}]"
 end
 
-print "#{gen_bar("CPU:", p, "bw")}  #{gen_bar("MEM:", b, "gw")}"
+used_str = "MEM" + format("% 5d", used) + "MB"
+print "#{gen_bar("CPU", p, "bw")} #{gen_bar(used_str, b, "gk")}"
