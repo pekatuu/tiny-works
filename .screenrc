@@ -2,6 +2,8 @@ caption always "%?%F%{= $SCREEN_CAPTION_NONE}%:%{r dd}%?%-Lw%?%F%{= $SCREEN_CAPT
 hardstatus alwayslastline "%{= dd}[%Y-%m-%d %c] %`"
 backtick 0 1 1 monitor.rb
 
+startup_message off
+vbell off
 defscrollback 10000
 
 defbce on
