@@ -30,6 +30,27 @@ function history-all { history -E 1 }
 
 ## Default shell configuration
 
+case $HOST in
+"amaretto")
+	export SCREEN_CAPTION_NONE=bw
+	export SCREEN_CAPTION_SELECTED=wb
+	prompt_bg=44
+	;;
+"corsica")
+	export SCREEN_CAPTION_NONE=gk
+	export SCREEN_CAPTION_SELECTED=kg
+	prompt_bg=43
+	;;
+*)
+	export SCREEN_CAPTION_NONE=rk
+	export SCREEN_CAPTION_SELECTED=kr
+	prompt_bg=41
+	;;
+esac
+
+
+
+
 #
 # set prompt
 #
@@ -38,7 +59,7 @@ setopt PROMPT_SUBST
 if [ "${TERM}" = "dumb" ]; then
     PROMPT="${HOST%%.*}[%~]%%%  "
 else
-    PROMPT="%B%{[46m%}${HOST%%.*}%%%{[m%} %b"
+    PROMPT="%B%{[${prompt_bg}m%}${HOST%%.*}%%%{[m%} %b"
     RPROMPT="[%~]"
 fi
 
@@ -117,4 +138,3 @@ alias -g U='| uniq'
 export JAVA_HOME=/usr/java/default
 export PATH=${PATH}:${HOME}/bin:${HOME}/share/jruby-1.6.6/bin:${JAVA_HOME}/bin
 export LESS=' -R'
-

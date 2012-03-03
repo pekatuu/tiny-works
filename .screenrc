@@ -1,4 +1,4 @@
-caption always "%?%F%{= gk}%:%{r dd}%?%-Lw%?%F%{= kg}%?%n%f %t%{-}%?%50L>%+Lw%<"
+caption always "%?%F%{= $SCREEN_CAPTION_NONE}%:%{r dd}%?%-Lw%?%F%{= $SCREEN_CAPTION_SELECTED}%?%n%f %t%{-}%?%50L>%+Lw%<"
 hardstatus alwayslastline "%{= dd}[%Y-%m-%d %c] %`"
 backtick 0 1 1 monitor.rb
 
