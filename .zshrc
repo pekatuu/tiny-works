@@ -1,5 +1,5 @@
 # Created by newuser for 4.3.4
-source ~/.zshrc-termtitle
+#source ~/.zshrc-termtitle
 
 autoload -U compinit
 compinit
@@ -42,6 +42,17 @@ else
     RPROMPT="[%~]"
 fi
 
+# title
+if [ "${TERM%%-*}" = "screen" ]; then
+    local -a host; host=`/bin/hostname -s`
+    preexec() {
+        # see [zsh-workers:13180]
+        # http://www.zsh.org/mla/workers/2000/msg03993.html
+        emulate -L zsh
+        local -a cmd; cmd=(${(z)2})
+        echo -n "k$host:$cmd[1]:t\\"
+    }
+fi
 
 # dabbrev
 HARDCOPYFILE=$HOME/.screen-hardcopy

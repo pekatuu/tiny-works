@@ -1,9 +1,11 @@
-caption always "%{=r dd}%-Lw%40L>%?%F%{=b kg}%:[%? %n%f %t %?%F%{-}%:]%?%+Lw %?%F%-024=GNU Screen of Git master%:%=%?"
+caption always "%?%F%{= gk}%:%{r dd}%?%-Lw%?%F%{= kg}%?%n%f %t%{-}%?%50L>%+Lw%<"
 hardstatus alwayslastline "%{= dd}[%Y-%m-%d %c] %`"
-backtick 0 3 3 monitor.rb
+backtick 0 1 1 monitor.rb
 
 defscrollback 10000
-term xterm-256color
+
+defbce on
+term screen-256color
 
 # window movement
 bind ^u eval "focus left" "focus up"
@@ -13,9 +15,9 @@ bind ^k eval "focus right" "focus down"
 
 bind ^o layout next
 
-escape ^t^t
+escape ^Tt
 
-layout new
-layout new
-screen 0
-screen 1
+#layout new
+#layout new
+#screen 0
+#screen 1
