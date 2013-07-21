@@ -26,6 +26,7 @@
 ;====================================
 ; Misc
 ;====================================
+(global-set-key (kbd "C-M-o") 'imenu)
 ;;;C-h BS
 (global-set-key "\C-h" 'delete-backward-char)
 ;;;M-h BS-word いくつかコマンドが犠牲
@@ -95,22 +96,22 @@
 ;;       (setq hl-line-face 'hlline-face))
 ;;     ))
 
- (if (not (window-system))
-     (progn
-       (set-input-method "anthy")
-       (if ( >= emacs-major-version 23)
- 	  (setq anthy-accept-timeout 1))
-    
-       (setq anthy-wide-space " ")
-       (anthy-change-hiragana-map "xn" "ん")
-       (anthy-change-hiragana-map "." "．")
-       (anthy-change-hiragana-map "," "，")
-       (anthy-change-hiragana-map "*" "*")
-       (anthy-change-hiragana-map "[" "[")
-       (anthy-change-hiragana-map "]" "]")
-       (anthy-change-hiragana-map "->" "→")
-       (anthy-change-hiragana-map "<-" "←")
-
+;; (if (not (window-system))
+;;     (progn
+;;       (set-input-method "anthy")
+;;       (if ( >= emacs-major-version 23)
+;; 	  (setq anthy-accept-timeout 1))
+;;    
+;;       (setq anthy-wide-space " ")
+;;       (anthy-change-hiragana-map "xn" "ん")
+;;       (anthy-change-hiragana-map "." "．")
+;;       (anthy-change-hiragana-map "," "，")
+;;       (anthy-change-hiragana-map "*" "*")
+;;       (anthy-change-hiragana-map "[" "[")
+;;       (anthy-change-hiragana-map "]" "]")
+;;       (anthy-change-hiragana-map "->" "→")
+;;       (anthy-change-hiragana-map "<-" "←")))
+;;
 
 ;;       (mapcar
 ;;        (lambda (f)
@@ -154,7 +155,6 @@
 (setq org-startup-truncated nil)
 (setq org-return-follows-link t)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-(org-remember-insinuate)
 (setq org-directory "~/memo/")
 (setq org-default-notes-file (concat org-directory "agenda.org"))
 (setq org-remember-templates
@@ -230,8 +230,6 @@ If the link is in hidden text, expose it."
       (goto-char pos)
       (setq org-link-search-failed t)
       (error "No further link found"))))
-(define-key org-mode-map "\M-n" 'org-next-visible-link)
-(define-key org-mode-map "\M-p" 'org-previous-visible-link)
 
 ;=================================
 ; anything.el
@@ -274,29 +272,23 @@ If the link is in hidden text, expose it."
 ;---------------------------------
 ; popwin
 ;---------------------------------
-(require 'popwin)
-(setq display-buffer-function 'popwin:display-buffer)
-(setq popwin:special-display-config
-      '(("*YaTeX-typesetting*" :noselect t)
-	("*dvi-printing*" :noselect t)
-	("*dvi-preview*" :noselect t)
-	("*Remember*")
-	("*Backtrace*" :noselect t)
-	("*Buffer List*" :height 30)
-	("^\*twittering" :regexp t)
-	("^\*anything" :regexp t :height 30)
-	("^\*magit:" :regexp t)))
-
-;=================================
-; color theme
-;=================================
-(require 'color-theme)
-(color-theme-initialize)
-(color-theme-gray25)
+;;(require 'popwin)
+;;(setq display-buffer-function 'popwin:display-buffer)
+;;(setq popwin:special-display-config
+;;      '(("*YaTeX-typesetting*" :noselect t)
+;;	("*dvi-printing*" :noselect t)
+;;	("*dvi-preview*" :noselect t)
+;;	("*Remember*")
+;;	("*Backtrace*" :noselect t)
+;;	("*Buffer List*" :height 30)
+;;	("^\*twittering" :regexp t)
+;;	("^\*anything" :regexp t :height 30)
+;;	("^\*magit:" :regexp t)))
 
 ;=================================
 ; ruby
 ;=================================
+(require 'align)
 (add-to-list 'align-rules-list
              '(ruby-comma-delimiter
                (regexp . ",\\(\\s-*\\)[^# \t\n]")
@@ -307,3 +299,27 @@ If the link is in hidden text, expose it."
                (regexp . "\\(\\s-*\\)=>\\s-*[^# \t\n]")
                (repeat . t)
                (modes  . '(ruby-mode))))
+
+;=================================
+; clojure-mode
+;=================================
+(require 'clojure-mode)
+
+;=================================
+; jaunte
+;=================================
+(require 'jaunte)
+(global-set-key (kbd "C-c C-j") 'jaunte)
+(global-set-key (kbd "C-c j") 'jaunte)
+
+;=================================
+; web-mode
+;=================================
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
