@@ -28,5 +28,5 @@ def gen_bar(prefix, used, color = "ww")
   "[#{base}\005{-}]"
 end
 
-used_str = "MEM" + format("% 5d", used) + "MB"
+used_str = "RAM" + format("% 5d", used) + "MB"
 print "#{gen_bar("CPU", p, "bW")} #{gen_bar(used_str, b, "gK")}"

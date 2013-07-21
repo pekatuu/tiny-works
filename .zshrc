@@ -1,5 +1,6 @@
 # Created by newuser for 4.3.4
 #source ~/.zshrc-termtitle
+fpath=(~/bin/zsh $fpath)
 
 autoload -U compinit
 compinit
@@ -136,5 +137,6 @@ alias -g U='| uniq'
 
 # env
 export JAVA_HOME=/usr/java/default
-export PATH=${PATH}:${HOME}/bin:${HOME}/share/jruby-1.6.6/bin:${JAVA_HOME}/bin
+export PATH=${PATH}:${HOME}/bin:${HOME}/share/jruby-1.6.6/bin:${JAVA_HOME}/bin:/var/lib/gems/1.8/bin
+
 export LESS=' -R'
