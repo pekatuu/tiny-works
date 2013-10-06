@@ -2,9 +2,13 @@
 (setq load-path
       (append (list 
 	       "/usr/share/emacs/site-lisp/anthy"
-	       "~/.emacs.d"
-	       "~/.emacs.d/auto-install") load-path))
+	       "~/.emacs.d") load-path))
 
+
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(package-initialize)
 
 ;===================================
 ; エンコード
@@ -65,13 +69,6 @@
 
 ;;;対応する括弧の強調
 (show-paren-mode t)
-
-;===================================
-; dabbrev-expand-multiple
-;===================================
-(require 'dabbrev-expand-multiple)
-(global-set-key "\M-/" 'dabbrev-expand-multiple)
-(setq dabbrev-expand-multiple-use-tooltip nil)
 
 ;===================================
 ; 日本語
@@ -234,24 +231,28 @@ If the link is in hidden text, expose it."
 ;=================================
 ; anything.el
 ;=================================
-(require 'anything)
-(require 'anything-startup)
-(global-set-key (kbd "C-x b") 'anything-for-files)
+;(require 'anything)
+;(require 'anything-startup)
+;(global-set-key (kbd "C-x b") 'anything-for-files)
 
 ;=================================
-; auto-install.el
+; helm
 ;=================================
-(require 'auto-install)
-(setq auto-install-directory "~/.emacs.d/auto-install/")
-(auto-install-update-emacswiki-package-name t)
-(auto-install-compatibility-setup)
+(require 'helm)
+(require 'helm-gtags)
 
-;=================================
-; auto complete
-;=================================
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-(ac-config-default)
+;;; bindings
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x b") 'helm-for-files)
+
+;;; hooks
+(add-hook 'c-mode-hook 'helm-gtags-mode)
+(add-hook 'helm-gtags-mode-hook
+          '(lambda ()
+              (local-set-key (kbd "M-.") 'helm-gtags-find-tag-from-here)
+              (local-set-key (kbd "M-,") 'helm-gtags-find-rtag)
+              (local-set-key (kbd "M-s s") 'helm-gtags-find-symbol)
+              (local-set-key (kbd "M-*") 'helm-gtags-pop-stack)))
 
 ;=================================
 ; Gauche
@@ -268,22 +269,6 @@ If the link is in hidden text, expose it."
 
 (define-key global-map
   "\C-cS" 'scheme-other-window)
-
-;---------------------------------
-; popwin
-;---------------------------------
-;;(require 'popwin)
-;;(setq display-buffer-function 'popwin:display-buffer)
-;;(setq popwin:special-display-config
-;;      '(("*YaTeX-typesetting*" :noselect t)
-;;	("*dvi-printing*" :noselect t)
-;;	("*dvi-preview*" :noselect t)
-;;	("*Remember*")
-;;	("*Backtrace*" :noselect t)
-;;	("*Buffer List*" :height 30)
-;;	("^\*twittering" :regexp t)
-;;	("^\*anything" :regexp t :height 30)
-;;	("^\*magit:" :regexp t)))
 
 ;=================================
 ; ruby
@@ -323,3 +308,15 @@ If the link is in hidden text, expose it."
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+
+;=================================
+; rinari
+;=================================
+(require 'rinari)
+(global-rinari-mode)
+
+;=================================
+; auto-complete
+;=================================
+(require 'auto-complete-config)
+(ac-config-default)
