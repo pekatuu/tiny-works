@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-WIDTH = 15
+WIDTH = 20
 SLEEP = 0.1
 def get_proc
   open("/proc/stat", "r"){|f|f.gets}.strip.split.drop(1).map(&:to_f) 
