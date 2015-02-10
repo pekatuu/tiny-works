@@ -1,6 +1,7 @@
 # Created by newuser for 4.3.4
 #source ~/.zshrc-termtitle
 fpath=(~/bin/zsh $fpath)
+# test
 
 autoload -U compinit
 compinit
