@@ -1,0 +1,9 @@
+clear lock
+clear control
+add control = Caps_Lock Control_L Control_R
+keycode 66 = Control_L
+keycode 100 = Control_R
+
+clear mod4
+add mod4 = Super_L
+keycode 102 = Super_L
