@@ -1,13 +1,11 @@
 ; set load path
-(setq load-path
-      (append (list 
-	       "/usr/share/emacs/site-lisp/anthy"
-	       "~/.emacs.d") load-path))
-
+;(setq load-path
+;      (append (list 
+;	       "~/.emacs.d/lisp") load-path)) 
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 
 ;===================================
@@ -59,7 +57,7 @@
 (setq frame-title-format   
       (concat "%b - emacs@" system-name))
 ;;; ツールバーを消す
-(setq tool-bar-mode 0)
+(tool-bar-mode 0)
 ;;; メニューバーを消す
 (menu-bar-mode 0)
 ;;;スクロールバーを消す
@@ -78,54 +76,6 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (set-buffer-file-coding-system 'utf-8)
-
-;===================================
-; Anthy 
-;===================================
-;入力モードに応じて色を変える
-; (defun anthy-adjust-cursor-color ()
-;   (if anthy-minor-mode
-;       (progn
-; 	(set-cursor-color "green")
-; 	(setq hl-line-face 'hlline-face-japanese))
-;;     (progn
-;;       (set-cursor-color "white")
-;;       (setq hl-line-face 'hlline-face))
-;;     ))
-
-;; (if (not (window-system))
-;;     (progn
-;;       (set-input-method "anthy")
-;;       (if ( >= emacs-major-version 23)
-;; 	  (setq anthy-accept-timeout 1))
-;;    
-;;       (setq anthy-wide-space " ")
-;;       (anthy-change-hiragana-map "xn" "ん")
-;;       (anthy-change-hiragana-map "." "．")
-;;       (anthy-change-hiragana-map "," "，")
-;;       (anthy-change-hiragana-map "*" "*")
-;;       (anthy-change-hiragana-map "[" "[")
-;;       (anthy-change-hiragana-map "]" "]")
-;;       (anthy-change-hiragana-map "->" "→")
-;;       (anthy-change-hiragana-map "<-" "←")))
-;;
-
-;;       (mapcar
-;;        (lambda (f)
-;; 	 (eval
-;; 	  `(defadvice ,f (after adjust-cursor-color activate)
-;; 	     (anthy-adjust-cursor-color))))
-;;        '(anthy-update-mode-line
-;; 	 anthy-mode-off
-;; 	 bury-buffer
-;; 	 kill-buffer
-;; 	 other-window
-;; 	 pop-to-buffer
-;; 	 switch-to-buffer
-;; 	 windmove-up
-;; 	 windmove-right
-;; 	 windmove-down
-;; 	 windmove-left))))
 
 ;===================================
 ; org
@@ -229,13 +179,6 @@ If the link is in hidden text, expose it."
       (error "No further link found"))))
 
 ;=================================
-; anything.el
-;=================================
-;(require 'anything)
-;(require 'anything-startup)
-;(global-set-key (kbd "C-x b") 'anything-for-files)
-
-;=================================
 ; helm
 ;=================================
 (require 'helm)
@@ -255,22 +198,6 @@ If the link is in hidden text, expose it."
               (local-set-key (kbd "M-*") 'helm-gtags-pop-stack)))
 
 ;=================================
-; Gauche
-;=================================
-(setq scheme-program-name "gosh")
-(require 'cmuscheme)
-
-(defun scheme-other-window ()
-  "Run scheme on other window"
-  (interactive)
-  (switch-to-buffer-other-window
-   (get-buffer-create "*scheme*"))
-  (run-scheme scheme-program-name))
-
-(define-key global-map
-  "\C-cS" 'scheme-other-window)
-
-;=================================
 ; ruby
 ;=================================
 (require 'align)
@@ -284,11 +211,6 @@ If the link is in hidden text, expose it."
                (regexp . "\\(\\s-*\\)=>\\s-*[^# \t\n]")
                (repeat . t)
                (modes  . '(ruby-mode))))
-
-;=================================
-; clojure-mode
-;=================================
-(require 'clojure-mode)
 
 ;=================================
 ; jaunte
@@ -308,12 +230,6 @@ If the link is in hidden text, expose it."
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-
-;=================================
-; rinari
-;=================================
-(require 'rinari)
-(global-rinari-mode)
 
 ;=================================
 ; auto-complete
